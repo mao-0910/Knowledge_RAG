@@ -1,0 +1,123 @@
+# 投标知识库 RAG 配置
+
+app:
+  name: "投标知识库 RAG"
+  version: "0.1.0"
+  debug: false
+
+server:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 4
+  reload: false
+
+# Elasticsearch 统一存储配置
+elasticsearch:
+  host: "localhost"
+  port: 9200
+  index_prefix: "bid_knowledge"
+  dimension: 1024
+  enabled: true
+
+# LLM 服务配置
+llm:
+  api_base: "http://192.168.2.3:42121/v1"
+  api_key: "dummy-key"
+  model: "Qwen3.5-122B-A10B-GPTQ-Int4"
+  timeout: 120
+  max_retries: 3
+  temperature: 0.1
+
+# Embedding 服务配置
+embedding:
+  model_name: "BAAI/bge-m3-multilingual"
+  dimension: 1024
+  device: "cpu"
+  batch_size: 32
+  max_length: 512
+  normalize: true
+  hf_token: ""
+
+# Rerank 服务配置
+rerank:
+  model_name: "BAAI/bge-reranker-base"
+  device: "cpu"
+  top_k: 20
+  max_length: 512
+
+# 文档处理配置
+document:
+  max_file_size: 50
+  supported_formats:
+    - ".docx"
+    - ".doc"
+    - ".pdf"
+    - ".xlsx"
+    - ".xls"
+    - ".md"
+    - ".txt"
+    - ".jpg"
+    - ".jpeg"
+    - ".png"
+    - ".bmp"
+  temp_dir: "./temp"
+  output_dir: "./output"
+
+# 文件存储配置
+storage:
+  path: "./storage/uploads"
+  max_size_mb: 50
+  enable_original_preserve: true
+
+# 分块配置
+chunking:
+  chunk_size: 512
+  chunk_overlap: 128
+  min_chunk_size: 50
+  semantic_window: 3
+  table_as_block: true
+
+# 检索配置
+retrieval:
+  vector_top_k: 100
+  bm25_top_k: 100
+  rrf_top_k: 50
+  final_top_k: 10
+  score_threshold: 0.5
+  rrf_k: 60
+
+# 图谱增强配置
+graph:
+  enabled: true
+  depth: 2
+  expand_factor: 3
+  relation_weights:
+    拥有: 1.0
+    参与: 0.9
+    包含: 0.8
+    支撑: 0.8
+    基于: 0.7
+    参考: 0.6
+    需要: 0.9
+    服务于: 0.7
+    配备: 0.8
+    被用于: 0.7
+    提供: 0.8
+    关联: 0.5
+
+# 审核配置
+audit:
+  auto_pass_threshold: 0.95
+  duplicate_threshold: 0.85
+  require_manual_review:
+    - "涉及合同金额"
+    - "涉及人员信息"
+    - "涉及资质证书"
+
+# 日志配置
+logging:
+  level: "INFO"
+  format: "json"
+  file: "./logs/app.log"
+  max_bytes: 10485760
+  backup_count: 5
